@@ -1,0 +1,34 @@
+{
+  "name": "playwright-project",
+  "version": "1.0.0",
+  "description": "Playwright project for automated testing with Page Object Model",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:pom": "playwright test \"tests/*.pom.spec.js\"",
+    "test:pom:headed": "playwright test \"tests/*.pom.spec.js\" --headed",
+    "test:pom:ui": "playwright test \"tests/*.pom.spec.js\" --ui",
+    "test:original": "playwright test tests/example.spec.js tests/advanced-ecommerce.spec.js tests/file-operations.spec.js",
+    "test:basic": "playwright test tests/example.pom.spec.js",
+    "test:ecommerce": "playwright test tests/advanced-ecommerce.pom.spec.js",
+    "test:files": "playwright test tests/file-operations.pom.spec.js"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "automation",
+    "pom",
+    "page-object-model"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

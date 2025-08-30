@@ -2,38 +2,56 @@
 node_modules/
 npm-debug.log*
 yarn-error.log
+yarn.lock
 
-# Playwright test results and reports
+# Playwright test results and reports (generated during test runs)
 test-results/
 playwright-report/
-*.log
-*.html
-*.xml
-*.json
-*.csv
+traces/
+debug-screenshots/
+screenshots/
+downloads/
 
-# VSCode settings
-.vscode/
+# Log files
+*.log
+
+# VSCode settings (optional - can be shared)
+# .vscode/
 
 # OS generated files
 .DS_Store
 Thumbs.db
-
-# Environment files
-.env
-.env.local
-.env.*.local
-
-# Build output
-dist/
-build/
-
-# Misc
 *.tmp
 *.swp
 *.swo
 
-# Other reports
+# Environment files (if any)
+.env
+.env.local
+.env.*.local
+
+# Build output (if any)
+dist/
+build/
+
+# Coverage reports
 coverage/
 allure-results/
 allure-report/
+
+# IDE specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# OS specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/

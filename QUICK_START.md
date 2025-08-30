@@ -1,71 +1,71 @@
-# ⚡ Playwright Quick Start - Cài đặt trong 5 phút
+# ⚡ Playwright Quick Start - Installation in 5 minutes
 
-## 🎯 Cài đặt nhanh (Copy & Paste)
+## 🎯 Quick Installation (Copy & Paste)
 
-### 1️⃣ Kiểm tra Node.js
+### 1️⃣ Check Node.js
 ```bash
-node --version  # Cần v16+
+node --version  # Need v16+
 npm --version
 ```
 
-### 2️⃣ Tạo dự án mới
+### 2️⃣ Create new project
 ```bash
 mkdir my-playwright-tests
 cd my-playwright-tests
 ```
 
-### 3️⃣ Cài đặt Playwright (Auto setup)
+### 3️⃣ Install Playwright (Auto setup)
 ```bash
 npm init playwright@latest
 ```
 
-**Hoặc cài đặt thủ công:**
+**Or install manually:**
 ```bash
 npm init -y
 npm install --save-dev @playwright/test
 npx playwright install
 ```
 
-### 4️⃣ Chạy test đầu tiên
+### 4️⃣ Run first test
 ```bash
 npm test
 ```
 
-### 5️⃣ Xem kết quả
+### 5️⃣ View results
 ```bash
 npx playwright show-report
 ```
 
 ---
 
-## 🎮 Commands cơ bản
+## 🎮 Basic Commands
 
 ```bash
-npm test                    # Chạy tất cả tests
-npm test -- --headed       # Hiển thị browser
-npm test -- --ui           # UI mode (khuyến nghị)
+npm test                    # Run all tests
+npm test -- --headed       # Show browser
+npm test -- --ui           # UI mode (recommended)
 npm test -- --debug        # Debug mode
-npx playwright show-report # Xem HTML report
+npx playwright show-report # View HTML report
 ```
 
 ---
 
-## 📁 Cấu trúc dự án sau khi cài đặt
+## 📁 Project structure after installation
 
 ```
 my-playwright-tests/
 ├── tests/
-│   └── example.spec.js     # Test mẫu
-├── playwright.config.js    # Cấu hình
+│   └── example.spec.js     # Sample test
+├── playwright.config.js    # Configuration
 ├── package.json
 └── package-lock.json
 ```
 
 ---
 
-## 🚀 Test đầu tiên
+## 🚀 First Test
 
-Tạo file `tests/my-first-test.spec.js`:
+Create file `tests/my-first-test.spec.js`:
 
 ```javascript
 const { test, expect } = require('@playwright/test');
@@ -83,35 +83,35 @@ test('Google search test', async ({ page }) => {
 });
 ```
 
-Chạy test:
+Run test:
 ```bash
 npx playwright test tests/my-first-test.spec.js --headed
 ```
 
 ---
 
-## 🛠️ Cấu hình nhanh
+## 🛠️ Quick Configuration
 
-Sửa `playwright.config.js` để hiển thị browser:
+Edit `playwright.config.js` to show browser:
 
 ```javascript
 use: {
-  headless: false,  // Thay đổi từ true thành false
+  headless: false,  // Change from true to false
   // ...other configs
 },
 ```
 
 ---
 
-## 🎯 Bước tiếp theo
+## 🎯 Next Steps
 
-1. **Đọc hướng dẫn chi tiết**: [PLAYWRIGHT_INSTALLATION_GUIDE.md](./PLAYWRIGHT_INSTALLATION_GUIDE.md)
-2. **Xem examples nâng cao**: [ADVANCED_TESTING_GUIDE.md](./ADVANCED_TESTING_GUIDE.md)
+1. **Read detailed guide**: [SETUP.md](./SETUP.md)
+2. **View advanced examples**: [README-POM.md](./README-POM.md)
 3. **Official docs**: https://playwright.dev/docs/intro
 
 ---
 
-## ❌ Lỗi thường gặp
+## ❌ Common Issues
 
 **"playwright: command not found"**
 ```bash
@@ -124,13 +124,13 @@ npx playwright install
 npx playwright install --force
 ```
 
-**Tests chạy quá chậm**
+**Tests running too slow**
 ```bash
-# Trong playwright.config.js
+# In playwright.config.js
 workers: 1,
 headless: true,
 ```
 
 ---
 
-**🎉 Done! Playwright đã sẵn sàng sử dụng!**
+**🎉 Done! Playwright is ready to use!**

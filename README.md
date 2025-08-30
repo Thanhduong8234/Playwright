@@ -10,6 +10,7 @@ This project is a comprehensive guide and demo for **Playwright** - a modern tes
 
 ### 📚 Installation Guides
 - **[QUICK_START.md](./QUICK_START.md)** - Quick installation in 5 minutes ⚡
+- **[SETUP.md](./SETUP.md)** - Complete setup guide for new developers 🚀
 - **[README-POM.md](./README-POM.md)** - Detailed Page Object Model guide 🏗️
 
 ### 🧪 Test Examples (By increasing difficulty)
