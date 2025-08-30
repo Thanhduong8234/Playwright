@@ -43,8 +43,8 @@ class TestHelpers {
    * @returns {Object} User data object
    */
   static generateFakeUser() {
-    const firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ'];
-    const lastNames = ['Văn', 'Thị', 'Minh', 'Hoàng', 'Thanh', 'Tuấn', 'Hương', 'Linh'];
+    const firstNames = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Emily', 'Robert', 'Lisa'];
+    const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'];
     const middleNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
