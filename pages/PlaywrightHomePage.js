@@ -2,13 +2,13 @@ const BasePage = require('./BasePage');
 
 /**
  * PLAYWRIGHT HOME PAGE
- * Page Object cho trang chủ Playwright
+ * Page Object for Playwright homepage
  */
 class PlaywrightHomePage extends BasePage {
   constructor(page) {
     super(page);
     
-    // Định nghĩa các selectors
+    // Define selectors
     this.selectors = {
       getStartedButton: 'text=Get started',
       docsMenu: 'nav >> text=Docs',
@@ -21,12 +21,12 @@ class PlaywrightHomePage extends BasePage {
       featuresList: '.features'
     };
     
-    // URL trang chủ
+    // Homepage URL
     this.url = 'https://playwright.dev/';
   }
 
   /**
-   * Điều hướng đến trang chủ Playwright
+   * Navigate to Playwright homepage
    */
   async navigate() {
     await this.goto(this.url);
@@ -34,14 +34,14 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Click vào nút "Get Started"
+   * Click "Get Started" button
    */
   async clickGetStarted() {
     await this.clickElement(this.selectors.getStartedButton);
   }
 
   /**
-   * Kiểm tra xem nút "Get Started" có hiển thị không
+   * Check if "Get Started" button is visible
    * @returns {Promise<boolean>}
    */
   async isGetStartedVisible() {
@@ -49,14 +49,14 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Click vào menu Docs
+   * Click Docs menu
    */
   async clickDocsMenu() {
     await this.clickElement(this.selectors.docsMenu);
   }
 
   /**
-   * Kiểm tra xem menu Docs có hiển thị không
+   * Check if Docs menu is visible
    * @returns {Promise<boolean>}
    */
   async isDocsMenuVisible() {
@@ -64,14 +64,14 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Click vào menu API
+   * Click API menu
    */
   async clickApiMenu() {
     await this.clickElement(this.selectors.apiMenu);
   }
 
   /**
-   * Kiểm tra xem menu API có hiển thị không
+   * Check if API menu is visible
    * @returns {Promise<boolean>}
    */
   async isApiMenuVisible() {
@@ -79,7 +79,7 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Kiểm tra xem heading Installation có hiển thị không
+   * Check if Installation heading is visible
    * @returns {Promise<boolean>}
    */
   async isInstallationHeadingVisible() {
@@ -87,7 +87,7 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Lấy text của page title
+   * Get page title text
    * @returns {Promise<string>}
    */
   async getTitle() {
@@ -95,8 +95,8 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Tìm kiếm
-   * @param {string} searchTerm - Từ khóa tìm kiếm
+   * Search
+   * @param {string} searchTerm - Search keyword
    */
   async search(searchTerm) {
     if (await this.isElementVisible(this.selectors.searchInput)) {
@@ -106,8 +106,8 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Lấy tất cả menu items trong navigation
-   * @returns {Promise<string[]>} Danh sách text của menu items
+   * Get all menu items in navigation
+   * @returns {Promise<string[]>} List of menu item texts
    */
   async getNavigationMenuItems() {
     const menuItems = await this.page.locator(`${this.selectors.navigationMenu} a`).all();
@@ -124,7 +124,7 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Kiểm tra xem trang có chứa các section chính không
+   * Check if main sections are present
    * @returns {Promise<{hero: boolean, features: boolean}>}
    */
   async checkMainSections() {
@@ -135,7 +135,7 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Scroll đến phần features
+   * Scroll to features section
    */
   async scrollToFeatures() {
     if (await this.isElementVisible(this.selectors.featuresList)) {
@@ -144,8 +144,8 @@ class PlaywrightHomePage extends BasePage {
   }
 
   /**
-   * Lấy thông tin về các features được hiển thị
-   * @returns {Promise<Array>} Danh sách features
+   * Get information about displayed features
+   * @returns {Promise<Array>} List of features
    */
   async getFeaturesList() {
     if (await this.isElementVisible(this.selectors.featuresList)) {

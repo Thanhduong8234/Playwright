@@ -2,13 +2,13 @@ const BasePage = require('./BasePage');
 
 /**
  * TODO MVC PAGE
- * Page Object cho trang TodoMVC demo
+ * Page Object for TodoMVC demo page
  */
 class TodoMVCPage extends BasePage {
   constructor(page) {
     super(page);
     
-    // Định nghĩa các selectors
+    // Define selectors
     this.selectors = {
       todoInput: '[placeholder="What needs to be done?"]',
       todoList: '.todo-list',
@@ -26,12 +26,12 @@ class TodoMVCPage extends BasePage {
       footer: '.footer'
     };
     
-    // URL trang TodoMVC
+    // TodoMVC page URL
     this.url = 'https://demo.playwright.dev/todomvc';
   }
 
   /**
-   * Điều hướng đến trang TodoMVC
+   * Navigate to TodoMVC page
    */
   async navigate() {
     await this.goto(this.url);
@@ -39,8 +39,8 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Thêm todo mới
-   * @param {string} todoText - Nội dung todo
+   * Add new todo
+   * @param {string} todoText - Todo content
    */
   async addTodo(todoText) {
     await this.fillInput(this.selectors.todoInput, todoText);
@@ -48,8 +48,8 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Thêm nhiều todos
-   * @param {string[]} todoTexts - Mảng các nội dung todo
+   * Add multiple todos
+   * @param {string[]} todoTexts - Array of todo contents
    */
   async addMultipleTodos(todoTexts) {
     for (const todoText of todoTexts) {
@@ -58,16 +58,16 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Lấy số lượng todos
-   * @returns {Promise<number>} Số lượng todos
+   * Get todo count
+   * @returns {Promise<number>} Number of todos
    */
   async getTodoCount() {
     return await this.getElementCount(this.selectors.todoItem);
   }
 
   /**
-   * Lấy danh sách text của tất cả todos
-   * @returns {Promise<string[]>} Danh sách text todos
+   * Get list of text for all todos
+   * @returns {Promise<string[]>} List of todo texts
    */
   async getTodoTexts() {
     const todoElements = await this.page.locator(this.selectors.todoLabel).all();
@@ -84,8 +84,8 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Đánh dấu todo theo index là completed
-   * @param {number} index - Index của todo (bắt đầu từ 0)
+   * Mark todo by index as completed
+   * @param {number} index - Todo index (starting from 0)
    */
   async completeTodo(index) {
     const todoCheckbox = this.page.locator(this.selectors.todoCheckbox).nth(index);
@@ -93,8 +93,8 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Bỏ đánh dấu todo theo index
-   * @param {number} index - Index của todo (bắt đầu từ 0)
+   * Unmark todo by index
+   * @param {number} index - Todo index (starting from 0)
    */
   async uncompleteTodo(index) {
     const todoCheckbox = this.page.locator(this.selectors.todoCheckbox).nth(index);
@@ -102,9 +102,9 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Kiểm tra todo có completed không
-   * @param {number} index - Index của todo
-   * @returns {Promise<boolean>} True nếu completed
+   * Check if todo is completed
+   * @param {number} index - Todo index
+   * @returns {Promise<boolean>} True if completed
    */
   async isTodoCompleted(index) {
     const todoCheckbox = this.page.locator(this.selectors.todoCheckbox).nth(index);
@@ -112,8 +112,8 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Xóa todo theo index
-   * @param {number} index - Index của todo
+   * Delete todo by index
+   * @param {number} index - Todo index
    */
   async deleteTodo(index) {
     const todoItem = this.page.locator(this.selectors.todoItem).nth(index);
@@ -123,9 +123,9 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Edit todo theo index
-   * @param {number} index - Index của todo
-   * @param {string} newText - Text mới
+   * Edit todo by index
+   * @param {number} index - Todo index
+   * @param {string} newText - New text
    */
   async editTodo(index, newText) {
     const todoItem = this.page.locator(this.selectors.todoItem).nth(index);
@@ -137,14 +137,14 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Toggle tất cả todos
+   * Toggle all todos
    */
   async toggleAllTodos() {
     await this.clickElement(this.selectors.toggleAll);
   }
 
   /**
-   * Clear tất cả completed todos
+   * Clear all completed todos
    */
   async clearCompleted() {
     if (await this.isElementVisible(this.selectors.clearCompleted)) {
@@ -153,8 +153,8 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Lấy text hiển thị số lượng todos còn lại
-   * @returns {Promise<string>} Text hiển thị count
+   * Get text for displaying the remaining todo count
+   * @returns {Promise<string>} Text for count
    */
   async getTodoCountText() {
     if (await this.isElementVisible(this.selectors.todoCount)) {
@@ -185,8 +185,8 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Lấy số lượng todos visible hiện tại
-   * @returns {Promise<number>} Số lượng todos visible
+   * Get current visible todo count
+   * @returns {Promise<number>} Current visible todo count
    */
   async getVisibleTodoCount() {
     const visibleTodos = await this.page.locator(`${this.selectors.todoItem}:visible`).count();
@@ -194,16 +194,16 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Kiểm tra footer có hiển thị không
-   * @returns {Promise<boolean>} True nếu footer visible
+   * Check if footer is visible
+   * @returns {Promise<boolean>} True if footer visible
    */
   async isFooterVisible() {
     return await this.isElementVisible(this.selectors.footer);
   }
 
   /**
-   * Lấy thông tin analytics về todos
-   * @returns {Promise<Object>} Object chứa thông tin analytics
+   * Get analytics for todos
+   * @returns {Promise<Object>} Object containing analytics
    */
   async getTodoAnalytics() {
     const analytics = await this.page.evaluate(() => {
@@ -245,9 +245,9 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Kiểm tra todo có tồn tại với text cụ thể không
-   * @param {string} todoText - Text cần tìm
-   * @returns {Promise<boolean>} True nếu tồn tại
+   * Check if todo exists with specific text
+   * @param {string} todoText - Text to find
+   * @returns {Promise<boolean>} True if exists
    */
   async hasTodoWithText(todoText) {
     const todoTexts = await this.getTodoTexts();
@@ -255,9 +255,9 @@ class TodoMVCPage extends BasePage {
   }
 
   /**
-   * Lấy index của todo theo text
-   * @param {string} todoText - Text cần tìm
-   * @returns {Promise<number>} Index của todo, -1 nếu không tìm thấy
+   * Get index of todo by text
+   * @param {string} todoText - Text to find
+   * @returns {Promise<number>} Todo index, -1 if not found
    */
   async getTodoIndexByText(todoText) {
     const todoTexts = await this.getTodoTexts();

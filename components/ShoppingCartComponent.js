@@ -2,13 +2,13 @@ const BasePage = require('../pages/BasePage');
 
 /**
  * SHOPPING CART COMPONENT
- * Component tái sử dụng cho giỏ hàng
+ * Reusable component for shopping cart
  */
 class ShoppingCartComponent extends BasePage {
   constructor(page) {
     super(page);
     
-    // Định nghĩa các selectors cho shopping cart
+    // Define selectors for shopping cart
     this.selectors = {
       cartContainer: '.cart, #shopping-cart, .shopping-cart',
       cartItems: '.cart-item, .item',
@@ -33,7 +33,7 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Mở giỏ hàng
+   * Open shopping cart
    */
   async openCart() {
     if (await this.isElementVisible(this.selectors.cartIcon)) {
@@ -42,16 +42,16 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Đóng giỏ hàng
+   * Close shopping cart
    */
   async closeCart() {
-    // Có thể click outside hoặc button close tùy implementation
+    // Can click outside or close button depending on implementation
     await this.page.keyboard.press('Escape');
   }
 
   /**
-   * Lấy số lượng items trong giỏ hàng
-   * @returns {Promise<number>} Số lượng items
+   * Get number of items in cart
+   * @returns {Promise<number>} Number of items
    */
   async getCartItemCount() {
     if (await this.isElementVisible(this.selectors.cartItemCount)) {
@@ -59,13 +59,13 @@ class ShoppingCartComponent extends BasePage {
       return parseInt(countText) || 0;
     }
     
-    // Fallback: đếm số cart items
+    // Fallback: count cart items
     return await this.getElementCount(this.selectors.cartItems);
   }
 
   /**
-   * Lấy badge count trên cart icon
-   * @returns {Promise<number>} Số hiển thị trên badge
+   * Get badge count on cart icon
+   * @returns {Promise<number>} Number displayed on badge
    */
   async getCartBadgeCount() {
     if (await this.isElementVisible(this.selectors.cartBadge)) {
@@ -76,8 +76,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Kiểm tra giỏ hàng có rỗng không
-   * @returns {Promise<boolean>} True nếu giỏ hàng rỗng
+   * Check if cart is empty
+   * @returns {Promise<boolean>} True if cart is empty
    */
   async isCartEmpty() {
     const itemCount = await this.getCartItemCount();
@@ -85,8 +85,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Lấy danh sách items trong giỏ hàng
-   * @returns {Promise<Array>} Danh sách items với thông tin chi tiết
+   * Get list of items in cart
+   * @returns {Promise<Array>} List of items with detailed information
    */
   async getCartItems() {
     const items = [];
@@ -113,7 +113,7 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Helper method để lấy text từ sub-element
+   * Helper method to get text from sub-element
    * @param {*} parentElement - Parent element
    * @param {string} selector - Sub-element selector
    * @returns {Promise<string>} Text content
@@ -125,27 +125,27 @@ class ShoppingCartComponent extends BasePage {
         return await element.textContent() || '';
       }
     } catch (error) {
-      // Element không tồn tại
+      // Element does not exist
     }
     return '';
   }
 
   /**
-   * Parse price string thành number
-   * @param {string} priceText - Text chứa giá
-   * @returns {number} Giá trị số
+   * Parse price string to number
+   * @param {string} priceText - Text containing price
+   * @returns {number} Numeric value
    */
   parsePrice(priceText) {
     if (!priceText) return 0;
     
-    // Remove currency symbols và parse
+    // Remove currency symbols and parse
     const cleanPrice = priceText.replace(/[^\d.,]/g, '').replace(',', '.');
     return parseFloat(cleanPrice) || 0;
   }
 
   /**
-   * Tăng số lượng item theo index
-   * @param {number} itemIndex - Index của item
+   * Increase quantity of item by index
+   * @param {number} itemIndex - Index of item
    */
   async increaseQuantity(itemIndex) {
     const item = this.page.locator(this.selectors.cartItems).nth(itemIndex);
@@ -157,8 +157,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Giảm số lượng item theo index
-   * @param {number} itemIndex - Index của item
+   * Decrease quantity of item by index
+   * @param {number} itemIndex - Index of item
    */
   async decreaseQuantity(itemIndex) {
     const item = this.page.locator(this.selectors.cartItems).nth(itemIndex);
@@ -170,8 +170,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Xóa item khỏi giỏ hàng theo index
-   * @param {number} itemIndex - Index của item
+   * Remove item from cart by index
+   * @param {number} itemIndex - Index of item
    */
   async removeItem(itemIndex) {
     const item = this.page.locator(this.selectors.cartItems).nth(itemIndex);
@@ -183,8 +183,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Xóa item theo tên sản phẩm
-   * @param {string} itemName - Tên sản phẩm cần xóa
+   * Remove item by product name
+   * @param {string} itemName - Name of product to remove
    */
   async removeItemByName(itemName) {
     const items = await this.getCartItems();
@@ -196,8 +196,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Lấy tổng tiền giỏ hàng
-   * @returns {Promise<number>} Tổng tiền
+   * Get total cart amount
+   * @returns {Promise<number>} Total amount
    */
   async getCartTotal() {
     if (await this.isElementVisible(this.selectors.cartTotal)) {
@@ -208,7 +208,7 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Lấy subtotal (tổng tiền chưa bao gồm thuế, phí ship)
+   * Get subtotal (excluding tax, shipping)
    * @returns {Promise<number>} Subtotal
    */
   async getCartSubtotal() {
@@ -220,8 +220,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Lấy thuế
-   * @returns {Promise<number>} Số tiền thuế
+   * Get tax
+   * @returns {Promise<number>} Tax amount
    */
   async getCartTax() {
     if (await this.isElementVisible(this.selectors.cartTax)) {
@@ -232,8 +232,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Lấy phí vận chuyển
-   * @returns {Promise<number>} Phí vận chuyển
+   * Get shipping fee
+   * @returns {Promise<number>} Shipping fee
    */
   async getCartShipping() {
     if (await this.isElementVisible(this.selectors.cartShipping)) {
@@ -244,7 +244,7 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Tiến hành checkout
+   * Proceed to checkout
    */
   async proceedToCheckout() {
     if (await this.isElementVisible(this.selectors.checkoutButton)) {
@@ -253,7 +253,7 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Tiếp tục mua sắm
+   * Continue shopping
    */
   async continueShopping() {
     if (await this.isElementVisible(this.selectors.continueShoppingBtn)) {
@@ -262,28 +262,28 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Validate thông tin giỏ hàng
+   * Validate cart information
    * @returns {Promise<{isValid: boolean, errors: string[]}>}
    */
   async validateCart() {
     const errors = [];
     
-    // Kiểm tra giỏ hàng có items không
+    // Check if cart has items
     if (await this.isCartEmpty()) {
-      errors.push('Giỏ hàng trống');
+      errors.push('Cart is empty');
     }
     
-    // Kiểm tra tổng tiền hợp lệ
+    // Check if total amount is valid
     const total = await this.getCartTotal();
     if (total <= 0) {
-      errors.push('Tổng tiền không hợp lệ');
+      errors.push('Total amount is invalid');
     }
     
-    // Kiểm tra từng item có quantity > 0
+    // Check if each item has quantity > 0
     const items = await this.getCartItems();
     for (const item of items) {
       if (item.quantity <= 0) {
-        errors.push(`Số lượng sản phẩm "${item.name}" không hợp lệ`);
+        errors.push(`Product quantity "${item.name}" is invalid`);
       }
     }
     
@@ -294,8 +294,8 @@ class ShoppingCartComponent extends BasePage {
   }
 
   /**
-   * Lấy tóm tắt giỏ hàng
-   * @returns {Promise<Object>} Thông tin tóm tắt
+   * Get cart summary
+   * @returns {Promise<Object>} Summary information
    */
   async getCartSummary() {
     return {

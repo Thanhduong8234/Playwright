@@ -1,25 +1,32 @@
 # 🎭 Playwright Page Object Model (POM) Framework
 
-Dự án Playwright đã được tổ chức lại theo mô hình **Page Object Model (POM)** để tăng tính tái sử dụng, bảo trì và mở rộng của code test.
+The Playwright project has been reorganized using the **Page Object Model (POM)** pattern to increase code reusability, maintainability, and extensibility.
 
-## 📁 Cấu trúc thư mục mới
+**🌍 Language**: All code and comments in this project use **English** to ensure international accessibility and ease of understanding for all developers.
+
+## 📁 New Directory Structure
 
 ```
 Playwright/
 ├── 📂 pages/                    # Page Object classes
-│   ├── BasePage.js             # Base class chung cho tất cả pages
-│   ├── PlaywrightHomePage.js   # Page object cho trang chủ Playwright
-│   └── TodoMVCPage.js          # Page object cho TodoMVC demo
+│   ├── BasePage.js             # Base class for all pages
+│   ├── PlaywrightHomePage.js   # Page object for Playwright homepage
+│   ├── TodoMVCPage.js          # Page object for TodoMVC demo
+│   └── AutomationExercise/     # Automation Exercise pages
+│       ├── HomePage.js         # Home page
+│       └── ContactPage.js      # Contact page
 │
-├── 📂 components/               # Component tái sử dụng
-│   ├── LoginComponent.js       # Component đăng nhập
-│   └── ShoppingCartComponent.js # Component giỏ hàng
+├── 📂 components/               # Reusable components
+│   ├── LoginComponent.js       # Login component
+│   └── ShoppingCartComponent.js # Shopping cart component
 │
 ├── 📂 utils/                    # Utility functions
-│   ├── TestHelpers.js          # Helper functions cho testing
-│   └── ApiHelpers.js           # Helper functions cho API testing
+│   ├── TestHelpers.js          # Helper functions for testing
+│   ├── ApiHelpers.js           # Helper functions for API testing
+│   ├── TestDataGenerator.js    # Test data generation utilities
+│   └── TimestampReporter.js    # Custom timestamp reporter
 │
-├── 📂 fixtures/                 # Test data và fixtures
+├── 📂 fixtures/                 # Test data and fixtures
 │   ├── testData.js             # Centralized test data
 │   └── playwright.fixtures.js   # Custom Playwright fixtures
 │
@@ -27,51 +34,54 @@ Playwright/
 │   └── pageUrls.js             # Centralized URL management
 │
 ├── 📂 tests/                    # Test files (refactored)
-│   ├── example.pom.spec.js     # Basic tests với POM
-│   ├── advanced-ecommerce.pom.spec.js # E-commerce tests với POM
-│   └── file-operations.pom.spec.js    # File operations với POM
+│   ├── example.pom.spec.js     # Basic tests with POM
+│   ├── advanced-ecommerce.pom.spec.js # E-commerce tests with POM
+│   ├── file-operations.pom.spec.js    # File operations with POM
+│   └── AutomationExercise/     # Automation Exercise tests
+│       ├── Exercise-001.pom.spec.js   # Exercise 001 with POM
+│       └── Excercise-002.pom.spec.js  # Exercise 002 with POM
 │
-└── 📂 tests/ (original)         # Test files gốc (tham khảo)
+└── 📂 tests/ (original)         # Original test files (reference)
     ├── example.spec.js
     ├── advanced-ecommerce.spec.js
     └── file-operations.spec.js
 ```
 
-## 🎯 Lợi ích của Page Object Model
+## 🎯 Benefits of Page Object Model
 
-### 1. **Tái sử dụng code**
-- Các page objects có thể được sử dụng trong nhiều test cases
-- Components có thể được chia sẻ giữa các pages khác nhau
+### 1. **Code Reusability**
+- Page objects can be used across multiple test cases
+- Components can be shared between different pages
 
-### 2. **Dễ bảo trì**
-- Khi UI thay đổi, chỉ cần update page object, không cần sửa từng test
-- Centralized selectors và methods
+### 2. **Easy Maintenance**
+- When UI changes, only need to update page objects, not individual tests
+- Centralized selectors and methods
 
-### 3. **Tách biệt concerns**
-- Test logic tách biệt khỏi page interactions
-- Business logic tách biệt khỏi technical implementation
+### 3. **Separation of Concerns**
+- Test logic separated from page interactions
+- Business logic separated from technical implementation
 
-### 4. **Cải thiện khả năng đọc code**
-- Test cases dễ hiểu hơn với high-level methods
+### 4. **Improved Code Readability**
+- Test cases are easier to understand with high-level methods
 - Self-documenting code
 
-## 🏗️ Kiến trúc POM
+## 🏗️ POM Architecture
 
-### **BasePage** - Lớp cơ sở
+### **BasePage** - Base Class
 ```javascript
 class BasePage {
   constructor(page) {
     this.page = page;
   }
   
-  // Common methods cho tất cả pages
+  // Common methods for all pages
   async goto(url) { /* ... */ }
   async clickElement(selector) { /* ... */ }
   async fillInput(selector, text) { /* ... */ }
 }
 ```
 
-### **Page Objects** - Các lớp page cụ thể
+### **Page Objects** - Specific Page Classes
 ```javascript
 class PlaywrightHomePage extends BasePage {
   constructor(page) {
@@ -88,7 +98,7 @@ class PlaywrightHomePage extends BasePage {
 }
 ```
 
-### **Components** - Các thành phần tái sử dụng
+### **Components** - Reusable Components
 ```javascript
 class LoginComponent extends BasePage {
   // Reusable login functionality
@@ -97,13 +107,13 @@ class LoginComponent extends BasePage {
 }
 ```
 
-## 🛠️ Cách sử dụng
+## 🛠️ How to Use
 
-### 1. **Test cơ bản với Page Objects**
+### 1. **Basic Test with Page Objects**
 ```javascript
 const { test, expect } = require('../fixtures/playwright.fixtures');
 
-test('Test với Page Object', async ({ playwrightHomePage }) => {
+test('Test with Page Object', async ({ playwrightHomePage }) => {
   await playwrightHomePage.navigate();
   await playwrightHomePage.clickGetStarted();
   
@@ -112,9 +122,9 @@ test('Test với Page Object', async ({ playwrightHomePage }) => {
 });
 ```
 
-### 2. **Test với Components**
+### 2. **Test with Components**
 ```javascript
-test('Test với Components', async ({ loginComponent, testData }) => {
+test('Test with Components', async ({ loginComponent, testData }) => {
   const user = testData.users.validUser;
   await loginComponent.login(user.email, user.password);
   
@@ -123,9 +133,9 @@ test('Test với Components', async ({ loginComponent, testData }) => {
 });
 ```
 
-### 3. **Test với Fixtures và Helpers**
+### 3. **Test with Fixtures and Helpers**
 ```javascript
-test('Test với Fixtures', async ({ 
+test('Test with Fixtures', async ({ 
   todoMVCPage, 
   testHelpers, 
   performanceMonitor,
@@ -169,14 +179,14 @@ const randomUser = testData.generateData('user');
 const randomProduct = testData.generateData('product');
 ```
 
-## 🔧 Utilities và Helpers
+## 🔧 Utilities and Helpers
 
 ### **TestHelpers** - General utilities
-- `generateRandomString()` - Tạo string ngẫu nhiên
-- `generateFakeUser()` - Tạo user data fake
-- `wait()` - Wait với timeout
+- `generateRandomString()` - Generate random string
+- `generateFakeUser()` - Generate fake user data
+- `wait()` - Wait with timeout
 - `retry()` - Retry logic
-- `formatCurrency()` - Format tiền tệ
+- `formatCurrency()` - Format currency
 
 ### **ApiHelpers** - API testing utilities
 - `setupApiMocks()` - Setup API mocking
@@ -184,12 +194,23 @@ const randomProduct = testData.generateData('product');
 - `makeApiRequest()` - Make API calls
 - `validateApiResponse()` - Validate API responses
 
-## 🎮 Fixtures Nâng cao
+### **TestDataGenerator** - Test data utilities
+- `generateUniqueName()` - Generate unique name
+- `generateUniqueEmail()` - Generate unique email
+- `generateUniqueSubject()` - Generate unique subject
+- `generateUniqueMessage()` - Generate unique message
+
+### **TimestampReporter** - Custom reporting
+- `generateTimestamp()` - Generate timestamp for reports
+- `generateDateFolder()` - Generate date-based folders
+- `ensureOutputDir()` - Ensure output directory exists
+
+## 🎮 Advanced Fixtures
 
 ### **Custom Fixtures**
 ```javascript
-// Auto-setup và cleanup
-test('Test với custom fixtures', async ({
+// Auto-setup and cleanup
+test('Test with custom fixtures', async ({
   authenticatedUser,     // Auto login
   cartWithItems,        // Pre-loaded cart
   performanceMonitor,   // Performance tracking
@@ -205,7 +226,7 @@ test('Test với custom fixtures', async ({
 test('Cross-browser test', async ({ multiBrowser }) => {
   const { chrome, firefox, safari } = multiBrowser;
   
-  // Test trên multiple browsers đồng thời
+  // Test on multiple browsers simultaneously
   await Promise.all([
     chrome.goto('/page'),
     firefox.goto('/page'),
@@ -214,29 +235,29 @@ test('Cross-browser test', async ({ multiBrowser }) => {
 });
 ```
 
-## 🚀 Chạy Tests
+## 🚀 Running Tests
 
-### **Chạy tests POM mới**
+### **Run new POM tests**
 ```bash
-# Chạy tất cả POM tests
-npm test -- tests/*.pom.spec.js
+# Run all POM tests
+npm run test:pom
 
-# Chạy specific POM test
+# Run specific POM test
 npm test -- tests/example.pom.spec.js
 
-# Chạy với headed mode để xem browser
+# Run with headed mode to see browser
 npm test -- tests/example.pom.spec.js --headed
 ```
 
-### **Chạy tests gốc (so sánh)**
+### **Run original tests (for comparison)**
 ```bash
-# Chạy tests gốc để so sánh
+# Run original tests for comparison
 npm test -- tests/example.spec.js
 ```
 
 ## 📈 Performance Monitoring
 
-Framework tích hợp sẵn performance monitoring:
+Framework includes built-in performance monitoring:
 
 ```javascript
 test('Performance test', async ({ performanceMonitor }) => {
@@ -250,11 +271,11 @@ test('Performance test', async ({ performanceMonitor }) => {
 });
 ```
 
-## 🔍 Debugging và Screenshots
+## 🔍 Debugging and Screenshots
 
 ### **Auto Screenshots**
 ```javascript
-test('Test với auto screenshots', async ({ screenshot }) => {
+test('Test with auto screenshots', async ({ screenshot }) => {
   await screenshot.take('initial-state');
   // ... test operations
   await screenshot.take('after-operation');
@@ -279,37 +300,37 @@ test('Network monitoring', async ({ apiHelpers }) => {
 ## 🎯 Best Practices
 
 ### 1. **Page Object Design**
-- Mỗi page một class riêng biệt
+- One class per page
 - Methods return meaningful values (boolean, data objects)
-- Use meaningful method names (`isElementVisible()` thay vì `checkElement()`)
+- Use meaningful method names (`isElementVisible()` instead of `checkElement()`)
 
 ### 2. **Selector Management**
-- Centralize selectors trong constructor
-- Use data-testid attributes khi có thể
+- Centralize selectors in constructor
+- Use data-testid attributes when possible
 - Avoid brittle selectors (class names, complex CSS)
 
 ### 3. **Error Handling**
-- Graceful error handling trong page objects
+- Graceful error handling in page objects
 - Meaningful error messages
-- Use retry mechanisms cho unstable elements
+- Use retry mechanisms for unstable elements
 
 ### 4. **Test Organization**
-- Group related tests trong describe blocks
+- Group related tests in describe blocks
 - Use descriptive test names
-- Keep tests independent và isolated
+- Keep tests independent and isolated
 
-## 🔮 Tương lai
+## 🔮 Future Enhancements
 
-Framework này có thể được mở rộng với:
+This framework can be extended with:
 
 - **Visual Testing**: Screenshot comparison
 - **API Testing**: Comprehensive API test suite
-- **Load Testing**: Performance và load testing
+- **Load Testing**: Performance and load testing
 - **CI/CD Integration**: Automated testing pipeline
 - **Reporting**: Custom test reports
 - **Parallel Execution**: Multi-worker test execution
 
-## 📚 Tài liệu tham khảo
+## 📚 References
 
 - [Playwright Documentation](https://playwright.dev/)
 - [Page Object Model Pattern](https://martinfowler.com/bliki/PageObject.html)
@@ -317,4 +338,4 @@ Framework này có thể được mở rộng với:
 
 ---
 
-Framework này cung cấp foundation mạnh mẽ cho việc testing với Playwright, đảm bảo code dễ bảo trì, mở rộng và tái sử dụng! 🎭✨
+This framework provides a strong foundation for testing with Playwright, ensuring maintainable, extensible, and reusable code! 🎭✨

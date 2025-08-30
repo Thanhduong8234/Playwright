@@ -1,6 +1,6 @@
 /**
  * TEST DATA
- * Centralized test data cho các test cases
+ * Centralized test data for test cases
  */
 
 const TestHelpers = require('../utils/TestHelpers');

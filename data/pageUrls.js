@@ -1,6 +1,6 @@
 /**
  * PAGE URLS
- * Centralized URL management cho các trang test
+ * Centralized URL management for test pages
  */
 
 class PageUrls {
@@ -14,7 +14,7 @@ class PageUrls {
   };
 
   /**
-   * Demo và test URLs
+   * Demo and test URLs
    */
   static demo = {
     playwright: 'https://playwright.dev/',

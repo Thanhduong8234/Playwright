@@ -1,6 +1,6 @@
 /**
  * API HELPERS
- * Các utility functions cho API testing
+ * Utility functions for API testing
  */
 
 class ApiHelpers {
@@ -58,10 +58,10 @@ class ApiHelpers {
       }
     };
 
-    // Merge với custom config
+    // Merge with custom config
     const mocks = { ...defaultMocks, ...mockConfig };
 
-    // Setup tất cả mocks
+    // Setup all mocks
     for (const [key, mock] of Object.entries(mocks)) {
       await page.route(mock.url, async route => {
         console.log(`🔄 Mocking API [${key}]: ${route.request().url()}`);

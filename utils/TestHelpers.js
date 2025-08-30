@@ -1,12 +1,12 @@
 /**
  * TEST HELPERS
- * Các utility functions hỗ trợ testing
+ * Utility functions to support testing
  */
 
 class TestHelpers {
   /**
    * Generate random string
-   * @param {number} length - Độ dài string
+   * @param {number} length - String length
    * @returns {string} Random string
    */
   static generateRandomString(length = 10) {
@@ -20,7 +20,7 @@ class TestHelpers {
 
   /**
    * Generate random email
-   * @param {string} domain - Domain của email (mặc định: example.com)
+   * @param {string} domain - Email domain (default: example.com)
    * @returns {string} Random email
    */
   static generateRandomEmail(domain = 'example.com') {
@@ -30,7 +30,7 @@ class TestHelpers {
 
   /**
    * Generate random phone number
-   * @param {string} prefix - Prefix của số điện thoại
+   * @param {string} prefix - Phone number prefix
    * @returns {string} Random phone number
    */
   static generateRandomPhone(prefix = '+84') {

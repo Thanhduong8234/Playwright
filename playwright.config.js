@@ -26,11 +26,11 @@ module.exports = defineConfig({
     ['html', { 
       open: 'never',
       outputFolder: `playwright-report/${new Date().toISOString().slice(0, 10)}/${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}_html-report`
-    }],   // HTML report với date folder và timestamp
+    }],   // HTML report with date folder and timestamp
     ['list'],                      // List reporter for console output
     ['./utils/TimestampReporter.js', { 
       outputDir: 'playwright-report' 
-    }]  // Custom reporter với date folder và timestamp
+    }]  // Custom reporter with date folder and timestamp
   ],
   
   // ===== GLOBAL TEST SETTINGS =====

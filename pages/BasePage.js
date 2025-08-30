@@ -1,6 +1,6 @@
 /**
  * BASE PAGE CLASS
- * Chứa các phương thức chung cho tất cả các trang
+ * Contains common methods for all pages
  */
 class BasePage {
   constructor(page) {
@@ -37,8 +37,8 @@ class BasePage {
   }
 
   /**
-   * Điều hướng đến URL cụ thể
-   * @param {string} url - URL cần điều hướng đến
+   * Navigate to specific URL
+   * @param {string} url - URL to navigate to
    */
   async goto(url) {
     // Maximize browser window first
@@ -49,45 +49,45 @@ class BasePage {
   }
 
   /**
-   * Chờ đợi element xuất hiện
-   * @param {string} selector - CSS selector của element
-   * @param {number} timeout - Thời gian chờ (ms)
+   * Wait for element to appear
+   * @param {string} selector - CSS selector of the element
+   * @param {number} timeout - Wait time (ms)
    */
   async waitForElement(selector, timeout = 30000) {
     await this.page.waitForSelector(selector, { timeout });
   }
 
   /**
-   * Chờ đợi element visible
-   * @param {string} selector - CSS selector của element
-   * @param {number} timeout - Thời gian chờ (ms)
+   * Wait for element to be visible
+   * @param {string} selector - CSS selector of the element
+   * @param {number} timeout - Wait time (ms)
    */
   async waitForElementVisible(selector, timeout = 30000) {
     await this.page.waitForSelector(selector, { state: 'visible', timeout });
   }
 
   /**
-   * Chờ đợi element hidden
-   * @param {string} selector - CSS selector của element
-   * @param {number} timeout - Thời gian chờ (ms)
+   * Wait for element to be hidden
+   * @param {string} selector - CSS selector of the element
+   * @param {number} timeout - Wait time (ms)
    */
   async waitForElementHidden(selector, timeout = 30000) {
     await this.page.waitForSelector(selector, { state: 'hidden', timeout });
   }
 
   /**
-   * Chờ đợi text xuất hiện
-   * @param {string} text - Text cần chờ
-   * @param {number} timeout - Thời gian chờ (ms)
+   * Wait for text to appear
+   * @param {string} text - Text to wait for
+   * @param {number} timeout - Wait time (ms)
    */
   async waitForText(text, timeout = 30000) {
     await this.page.waitForSelector(`text=${text}`, { timeout });
   }
 
   /**
-   * Lấy text của element
-   * @param {string} selector - CSS selector của element
-   * @returns {Promise<string>} Text content của element
+   * Get text content of element
+   * @param {string} selector - CSS selector of the element
+   * @returns {Promise<string>} Text content of the element
    */
   async getElementText(selector) {
     await this.waitForElementVisible(selector);

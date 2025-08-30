@@ -1,6 +1,6 @@
 /**
- * Custom Playwright Reporter với timestamp prefix
- * Tự động tạo multiple report files mà không cần thêm code vào test
+ * Custom Playwright Reporter with timestamp prefix
+ * Automatically creates multiple report files without adding code to tests
  */
 
 const fs = require('fs');
@@ -18,8 +18,8 @@ class TimestampReporter {
   }
 
   /**
-   * Tạo timestamp cho report
-   * @returns {string} Timestamp dạng YYYY-MM-DD_HH-MM-SS
+   * Generate timestamp for report
+   * @returns {string} Timestamp in YYYY-MM-DD_HH-MM-SS format
    */
   generateTimestamp() {
     const now = new Date();
@@ -34,8 +34,8 @@ class TimestampReporter {
   }
 
   /**
-   * Tạo folder theo ngày
-   * @returns {string} Date folder dạng YYYY-MM-DD
+   * Generate date folder
+   * @returns {string} Date folder in YYYY-MM-DD format
    */
   generateDateFolder() {
     const now = new Date();
@@ -47,7 +47,7 @@ class TimestampReporter {
   }
 
   /**
-   * Tạo thư mục output nếu chưa tồn tại
+   * Create output directory if it doesn't exist
    */
   ensureOutputDir() {
     if (!fs.existsSync(this.outputDir)) {
@@ -56,7 +56,7 @@ class TimestampReporter {
   }
 
   /**
-   * Được gọi khi bắt đầu test suite
+   * Called when test suite begins
    */
   onBegin(config, suite) {
     this.startTime = new Date();
@@ -64,7 +64,7 @@ class TimestampReporter {
   }
 
   /**
-   * Được gọi khi một test kết thúc
+   * Called when a test ends
    */
   onTestEnd(test, result) {
     const testData = {
@@ -88,13 +88,13 @@ class TimestampReporter {
   }
 
   /**
-   * Được gọi khi test suite kết thúc
+   * Called when test suite ends
    */
   onEnd(result) {
     this.endTime = new Date();
     const duration = this.endTime - this.startTime;
 
-    // Tạo summary data
+    // Create summary data
     const summary = {
       timestamp: this.timestamp,
       startTime: this.startTime.toISOString(),

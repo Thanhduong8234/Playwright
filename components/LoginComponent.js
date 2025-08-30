@@ -2,13 +2,13 @@ const BasePage = require('../pages/BasePage');
 
 /**
  * LOGIN COMPONENT
- * Component tái sử dụng cho chức năng đăng nhập
+ * Reusable component for login functionality
  */
 class LoginComponent extends BasePage {
   constructor(page) {
     super(page);
     
-    // Định nghĩa các selectors cho login component
+    // Define selectors for login component
     this.selectors = {
       loginForm: '.login-form, #login-form, form[name="login"]',
       emailInput: 'input[name="email"], input[type="email"], #email',
@@ -23,10 +23,10 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Thực hiện đăng nhập
-   * @param {string} email - Email đăng nhập
-   * @param {string} password - Mật khẩu
-   * @param {boolean} rememberMe - Có ghi nhớ đăng nhập không
+   * Perform login
+   * @param {string} email - Login email
+   * @param {string} password - Password
+   * @param {boolean} rememberMe - Whether to remember login
    */
   async login(email, password, rememberMe = false) {
     await this.fillEmail(email);
@@ -40,23 +40,23 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Nhập email
-   * @param {string} email - Email cần nhập
+   * Fill email field
+   * @param {string} email - Email to fill
    */
   async fillEmail(email) {
     await this.fillInput(this.selectors.emailInput, email);
   }
 
   /**
-   * Nhập password
-   * @param {string} password - Password cần nhập
+   * Fill password field
+   * @param {string} password - Password to fill
    */
   async fillPassword(password) {
     await this.fillInput(this.selectors.passwordInput, password);
   }
 
   /**
-   * Click nút đăng nhập
+   * Click login button
    */
   async clickLoginButton() {
     await this.clickElement(this.selectors.loginButton);
@@ -72,7 +72,7 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Click link "Forgot Password"
+   * Click "Forgot Password" link
    */
   async clickForgotPassword() {
     if (await this.isElementVisible(this.selectors.forgotPasswordLink)) {
@@ -81,24 +81,24 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Kiểm tra login form có hiển thị không
-   * @returns {Promise<boolean>} True nếu form visible
+   * Check if login form is visible
+   * @returns {Promise<boolean>} True if form is visible
    */
   async isLoginFormVisible() {
     return await this.isElementVisible(this.selectors.loginForm);
   }
 
   /**
-   * Kiểm tra error message có hiển thị không
-   * @returns {Promise<boolean>} True nếu có error
+   * Check if error message is displayed
+   * @returns {Promise<boolean>} True if there's an error
    */
   async hasErrorMessage() {
     return await this.isElementVisible(this.selectors.errorMessage);
   }
 
   /**
-   * Lấy text của error message
-   * @returns {Promise<string>} Text của error message
+   * Get error message text
+   * @returns {Promise<string>} Text of error message
    */
   async getErrorMessage() {
     if (await this.hasErrorMessage()) {
@@ -108,16 +108,16 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Kiểm tra success message có hiển thị không
-   * @returns {Promise<boolean>} True nếu có success message
+   * Check if success message is displayed
+   * @returns {Promise<boolean>} True if there's a success message
    */
   async hasSuccessMessage() {
     return await this.isElementVisible(this.selectors.successMessage);
   }
 
   /**
-   * Lấy text của success message
-   * @returns {Promise<string>} Text của success message
+   * Get success message text
+   * @returns {Promise<string>} Text of success message
    */
   async getSuccessMessage() {
     if (await this.hasSuccessMessage()) {
@@ -127,18 +127,18 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Kiểm tra loading spinner có hiển thị không
-   * @returns {Promise<boolean>} True nếu đang loading
+   * Check if loading spinner is displayed
+   * @returns {Promise<boolean>} True if loading
    */
   async isLoading() {
     return await this.isElementVisible(this.selectors.loadingSpinner);
   }
 
   /**
-   * Chờ cho quá trình login hoàn tất
+   * Wait for login process to complete
    */
   async waitForLoginComplete() {
-    // Chờ loading spinner biến mất
+    // Wait for loading spinner to disappear
     if (await this.isLoading()) {
       await this.page.waitForSelector(this.selectors.loadingSpinner, { 
         state: 'hidden', 
@@ -148,22 +148,22 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Validate form trước khi submit
+   * Validate form before submission
    * @returns {Promise<{isValid: boolean, errors: string[]}>}
    */
   async validateForm() {
     const errors = [];
     
-    // Kiểm tra email field
+    // Check email field
     const emailValue = await this.page.locator(this.selectors.emailInput).inputValue();
     if (!emailValue || !emailValue.includes('@')) {
-      errors.push('Email không hợp lệ');
+      errors.push('Email is invalid');
     }
     
-    // Kiểm tra password field
+    // Check password field
     const passwordValue = await this.page.locator(this.selectors.passwordInput).inputValue();
     if (!passwordValue || passwordValue.length < 6) {
-      errors.push('Mật khẩu phải có ít nhất 6 ký tự');
+      errors.push('Password must be at least 6 characters');
     }
     
     return {
@@ -173,7 +173,7 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Clear tất cả form fields
+   * Clear all form fields
    */
   async clearForm() {
     await this.fillEmail('');
@@ -181,8 +181,8 @@ class LoginComponent extends BasePage {
   }
 
   /**
-   * Lấy thông tin form hiện tại
-   * @returns {Promise<Object>} Thông tin form
+   * Get current form data
+   * @returns {Promise<Object>} Form data
    */
   async getFormData() {
     return {

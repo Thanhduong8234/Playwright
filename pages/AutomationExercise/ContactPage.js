@@ -1,10 +1,15 @@
 const BasePage = require('../BasePage');
 
+/**
+ * AUTOMATION EXERCISE CONTACT PAGE
+ * Page Object for AutomationExercise contact page
+ */
 class ContactPage extends BasePage {
   constructor(page) {
     super(page);
   }
 
+  // Define selectors for contact form elements
   selectors = {
     input_Name: 'input[name="name"]',
     input_Email: 'input[name="email"]',
@@ -14,14 +19,23 @@ class ContactPage extends BasePage {
     successMessage: 'div[class="status alert alert-success"]',
     button_Home: 'a[href="/"]',
     input_UploadFile: 'input[name="upload_file"]'
-
   }
 
+  /**
+   * Navigate to contact page
+   */
   async navigate() {
     await this.goto('https://automationexercise.com/contactus');
     await this.waitForPageLoad();
   }
 
+  /**
+   * Fill contact form with provided data
+   * @param {string} name - Contact name
+   * @param {string} email - Contact email
+   * @param {string} subject - Contact subject
+   * @param {string} message - Contact message
+   */
   async fillContactForm(name, email, subject, message) {  
     await this.waitForPageLoad();  
     await this.fillInput(this.selectors.input_Name, name);
@@ -30,27 +44,37 @@ class ContactPage extends BasePage {
     await this.fillInput(this.selectors.input_Message, message);
   }
   
+  /**
+   * Click submit button
+   */
   async clickSubmit() {
     await this.clickElement(this.selectors.button_Submit);
   }
 
+  /**
+   * Get success message text
+   * @returns {Promise<string>} Success message text
+   */
   async getSuccessMessage() {
     return await this.getElementText(this.selectors.successMessage);
   }
 
-  
-  // Method để verify và confirm alert
+  /**
+   * Method to verify and confirm alert
+   * @param {string} expectedMessage - Expected alert message (optional)
+   * @returns {Promise<Object>} Object with alert message and appearance status
+   */
   async verifyAndConfirmAlert(expectedMessage = null) {
     let alertMessage = '';
     let alertAppeared = false;
     
-    // Setup listener cho dialog
+    // Setup listener for dialog
     this.page.once('dialog', async (dialog) => {
       alertMessage = dialog.message();
       alertAppeared = true;
       console.log('🚨 Alert appeared with message:', alertMessage);
       
-      // Verify message nếu có
+      // Verify message if provided
       if (expectedMessage && !alertMessage.includes(expectedMessage)) {
         throw new Error(`Expected alert message to contain "${expectedMessage}", but got "${alertMessage}"`);
       }
@@ -63,12 +87,17 @@ class ContactPage extends BasePage {
     return { alertMessage, alertAppeared };
   }
 
-  // Method cũ giữ lại để backward compatibility
+  // Method kept for backward compatibility
   async confirmAlert() {
     return await this.verifyAndConfirmAlert();
   }
 
-  // Method chỉ để wait và verify alert xuất hiện
+  /**
+   * Method to wait and verify alert appearance
+   * @param {string} expectedMessage - Expected alert message (optional)
+   * @param {number} timeout - Timeout in milliseconds
+   * @returns {Promise<Object>} Object with alert message and dialog
+   */
   async waitForAlert(expectedMessage = null, timeout = 5000) {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
@@ -88,10 +117,20 @@ class ContactPage extends BasePage {
     });
   }
   
+  /**
+   * Verify success message
+   * @param {string} message - Expected message
+   * @returns {Promise<string>} Actual message text
+   */
   async verifyMessage(message) {
     return await this.getElementText(this.selectors.successMessage);
   }
 
+  /**
+   * Verify blank email validation message
+   * @param {string} message - Expected validation message
+   * @returns {Promise<string>} Actual validation message
+   */
   async verifyBlankEmailMessage(message) {
     // Trigger validation first by clearing email and clicking submit
     await this.fillInput(this.selectors.input_Email, '');
