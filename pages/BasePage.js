@@ -179,7 +179,11 @@ class BasePage {
   async waitForPageLoad() {
     await this.page.waitForLoadState('load');
     await this.page.waitForLoadState('domcontentloaded');
-    await this.page.waitForLoadState('networkidle');
+    try {
+      await this.page.waitForLoadState('networkidle');
+    } catch (error) {
+      console.log('Error waiting for network idle state:', error.message);
+    }
   }
 
   /**

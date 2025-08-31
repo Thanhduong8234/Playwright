@@ -15,7 +15,14 @@ module.exports = defineConfig({
   
   // ===== PARALLEL EXECUTION =====
   fullyParallel: true,             // Run tests in parallel
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 4, // 4 workers for parallel execution (adjust based on your CPU cores)
+  maxFailures: 5,                  // Stop after 5 failures to avoid wasting time
+  
+  // ===== PERFORMANCE OPTIMIZATION =====
+  globalSetup: undefined,           // No global setup for faster startup
+  globalTeardown: undefined,        // No global teardown for faster cleanup
+  preserveOutput: 'failures-only',  // Keep output only for failed tests
+  maxConcurrency: 4,               // Maximum concurrent test executions
   
   // ===== ERROR HANDLING =====
   forbidOnly: !!process.env.CI,
@@ -39,14 +46,14 @@ module.exports = defineConfig({
     // baseURL: 'https://automationexercise.com',
     
     // Browser Display Settings
-    headless: false,               // Show browser window for debugging
+    headless: true,               // Run headless for better performance
     viewport: null,                // Use full screen instead of fixed size
     
     // Browser Behavior
     ignoreHTTPSErrors: true,       // Ignore SSL certificate errors
     acceptDownloads: true,         // Allow file downloads
     
-    // Browser Launch Options
+    // Browser Launch Options - Optimized for parallel execution
     launchOptions: {
       args: [
         '--start-maximized',         // Start browser maximized
@@ -55,18 +62,22 @@ module.exports = defineConfig({
         '--no-sandbox',             // Additional flag for full screen
         '--disable-dev-shm-usage',  // Use /tmp instead of /dev/shm
         '--disable-extensions',      // Disable all extensions
-        '--disable-plugins'         // Disable plugins
+        '--disable-plugins',        // Disable plugins
+        '--disable-gpu',            // Disable GPU for better stability
+        '--disable-background-timer-throttling', // Better performance
+        '--disable-backgrounding-occluded-windows', // Better performance
+        '--disable-renderer-backgrounding' // Better performance
       ]
     },
     
-    // Test Artifacts (when tests fail)
-    // trace: 'on-first-retry',       // Record trace only on retry
-    // screenshot: 'only-on-failure', // Screenshot only when test fails
-    // video: 'retain-on-failure',    // Video only when test fails
+    // Test Artifacts - Optimized for parallel execution
+    trace: 'off',                   // Disable trace for better performance
+    screenshot: 'only-on-failure',  // Screenshot only when test fails
+    video: 'off',                   // Disable video for better performance
   },
 
   // ===== BROWSER PROJECTS =====
-  // Run against multiple browsers/devices
+  // Run against multiple browsers/devices in parallel
   projects: [
     {
       name: 'chromium',
@@ -74,39 +85,44 @@ module.exports = defineConfig({
         ...devices['Desktop Chrome'],
         // Use Playwright's bundled Chromium (most stable)
       },
+      testMatch: /.*\.spec\.js/,  // Run all spec files
     },
     
     // ===== OTHER BROWSERS (ENABLED for comprehensive testing) =====
-    // Comment out browsers you don't want to test
+    // All browsers will run in parallel for each test case
     
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+      testMatch: /.*\.spec\.js/,  // Run all spec files
+    },
     
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      testMatch: /.*\.spec\.js/,  // Run all spec files
+    },
 
-    // ===== REAL BROWSERS (DISABLED) =====
-    // Uncomment to use real installed browsers instead
+    // ===== REAL BROWSERS (ENABLED) =====
+    // Real browsers for more accurate testing
     
-    // {
-    //   name: 'chrome',
-    //   use: { 
-    //     ...devices['Desktop Chrome'], 
-    //     channel: 'chrome' // Requires Chrome to be installed
-    //   },
-    // },
+    {
+      name: 'chrome',
+      use: { 
+        ...devices['Desktop Chrome'], 
+        channel: 'chrome' // Requires Chrome to be installed
+      },
+      testMatch: /.*\.spec\.js/,  // Run all spec files
+    },
     
-    // {
-    //   name: 'edge',
-    //   use: { 
-    //     ...devices['Desktop Edge'], 
-    //     channel: 'msedge' // Requires Edge to be installed
-    //   },
-    // },
+    {
+      name: 'edge',
+      use: { 
+        ...devices['Desktop Edge'], 
+        channel: 'msedge' // Requires Edge to be installed
+      },
+      testMatch: /.*\.spec\.js/,  // Run all spec files
+    },
 
     // ===== MOBILE TESTING (DISABLED) =====
     // Uncomment for mobile/responsive testing

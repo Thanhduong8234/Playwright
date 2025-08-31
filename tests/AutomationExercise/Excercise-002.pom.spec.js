@@ -10,7 +10,7 @@ test('Excercise-002', async ({ page }) => {
 
     const fakeUser = TestHelpers.generateFakeUser();
     const uniqueName = TestDataGenerator.generateUniqueName(fakeUser.fullName);
-    const uniqueEmail = TestDataGenerator.generateUniqueEmail(fakeUser.email, 'example.com');
+    const uniqueEmail = TestDataGenerator.generateUniqueEmail(fakeUser.firstName, 'example.com');
     const uniqueSubject = TestDataGenerator.generateUniqueSubject();
     const uniqueMessage = TestDataGenerator.generateUniqueMessage();
 
