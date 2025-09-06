@@ -18,8 +18,17 @@ class HomePage extends BasePage {
    * Open browser and navigate to AutomationExercise homepage
    */
   async openBrowser() {
-    await this.page.goto('https://automationexercise.com/');
-    await this.waitForPageLoad();
+    try {
+      await this.page.goto('https://automationexercise.com/', { 
+        waitUntil: 'networkidle', 
+        timeout: 30000 
+      });
+      await this.waitForPageLoad();
+      console.log('✅ Successfully opened AutomationExercise homepage');
+    } catch (error) {
+      console.error('❌ Failed to open AutomationExercise homepage:', error.message);
+      throw error;
+    }
   }
 
   /**

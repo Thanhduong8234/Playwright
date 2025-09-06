@@ -1,0 +1,280 @@
+# GITHUB ACTIONS WORKFLOW
+# Automated test execution in CI/CD pipeline
+
+name: 🎭 Playwright + Cucumber Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - regression
+          - e2e
+          - contact
+          - performance
+      browser:
+        description: 'Browser to test'
+        required: true
+        default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+          - all
+      environment:
+        description: 'Test environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - prod
+
+jobs:
+  # Pre-flight checks
+  pre-flight:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run-tests: ${{ steps.check.outputs.should-run }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check if tests should run
+        id: check
+        run: |
+          # Skip tests if only documentation changed
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(md|txt)$' && ! git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -v -E '\.(md|txt)$'; then
+            echo "should-run=false" >> $GITHUB_OUTPUT
+          else
+            echo "should-run=true" >> $GITHUB_OUTPUT
+          fi
+
+  # Smoke tests (fast feedback)
+  smoke-tests:
+    needs: pre-flight
+    if: needs.pre-flight.outputs.should-run-tests == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run smoke tests
+        run: |
+          node enhanced-test-runner.js \
+            --suite smoke \
+            --browser chromium \
+            --parallel 2 \
+            --screenshots on-failure \
+            --timeout 60
+        env:
+          CI: true
+          ENVIRONMENT: staging
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results
+          path: |
+            reports/
+            screenshots/
+          retention-days: 7
+
+  # Full test matrix (comprehensive testing)
+  full-tests:
+    needs: [pre-flight, smoke-tests]
+    if: needs.pre-flight.outputs.should-run-tests == 'true' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        suite: [regression, e2e, contact]
+        exclude:
+          # Skip webkit for contact tests (known issues)
+          - browser: webkit
+            suite: contact
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      
+      - name: Run tests
+        run: |
+          node enhanced-test-runner.js \
+            --suite ${{ matrix.suite }} \
+            --browser ${{ matrix.browser }} \
+            --parallel 1 \
+            --screenshots on-failure \
+            --videos \
+            --trace \
+            --retries 1
+        env:
+          CI: true
+          ENVIRONMENT: ${{ github.event.inputs.environment || 'staging' }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.browser }}-${{ matrix.suite }}
+          path: |
+            reports/
+            screenshots/
+            videos/
+            traces/
+          retention-days: 14
+
+  # Performance tests
+  performance-tests:
+    needs: [pre-flight, smoke-tests]
+    if: needs.pre-flight.outputs.should-run-tests == 'true' && github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run performance tests
+        run: |
+          node enhanced-test-runner.js \
+            --suite performance \
+            --browser chromium \
+            --parallel 1 \
+            --trace
+        env:
+          CI: true
+          ENVIRONMENT: prod
+      
+      - name: Analyze performance
+        run: |
+          # Custom performance analysis script
+          node scripts/analyze-performance.js
+      
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-results
+          path: |
+            reports/
+            performance/
+          retention-days: 30
+
+  # Test reporting and notifications
+  report:
+    needs: [smoke-tests, full-tests, performance-tests]
+    if: always() && needs.pre-flight.outputs.should-run-tests == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+      
+      - name: Generate consolidated report
+        run: |
+          node scripts/generate-consolidated-report.js artifacts/
+      
+      - name: Upload consolidated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: consolidated-test-report
+          path: consolidated-report/
+          retention-days: 30
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'consolidated-report/summary.json';
+            
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              const comment = `
+              ## 🎭 Test Results Summary
+              
+              | Suite | Status | Duration | Tests |
+              |-------|--------|----------|-------|
+              ${report.suites.map(suite => 
+                `| ${suite.name} | ${suite.status === 'passed' ? '✅' : '❌'} | ${suite.duration} | ${suite.total} |`
+              ).join('\n')}
+              
+              **Overall Status:** ${report.overall.status === 'passed' ? '✅ PASSED' : '❌ FAILED'}
+              
+              [View detailed report](${report.reportUrl})
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+      
+      - name: Slack notification
+        if: failure() && github.event_name == 'schedule'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#test-alerts'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow

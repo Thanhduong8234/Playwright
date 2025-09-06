@@ -1,0 +1,69 @@
+{
+  "default": {
+    "requireModule": [],
+    "require": [
+      "features/step_definitions/**/*.js",
+      "hooks/**/*.js"
+    ],
+    "timeout": 120000,
+    "format": [
+      "progress",
+      "html:reports/cucumber-report.html",
+      "json:reports/cucumber-report.json",
+      "@cucumber/pretty-formatter"
+    ],
+    "formatOptions": {
+      "snippetInterface": "async-await"
+    },
+    "paths": [
+      "features/**/*.feature"
+    ],
+    "parallel": 2,
+    "retry": 1,
+    "retryTagFilter": "@flaky",
+    "tags": "not @skip and not @wip",
+    "worldParameters": {
+      "playwright": {
+        "headless": true,
+        "browser": "chromium",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "timeout": 90000
+      },
+      "environment": "staging",
+      "baseUrls": {
+        "staging": "https://automationexercise.com",
+        "production": "https://automationexercise.com"
+      }
+    }
+  },
+  "headed": {
+    "worldParameters": {
+      "playwright": {
+        "headless": false
+      }
+    }
+  },
+  "firefox": {
+    "worldParameters": {
+      "playwright": {
+        "browser": "firefox"
+      }
+    }
+  },
+  "webkit": {
+    "worldParameters": {
+      "playwright": {
+        "browser": "webkit"
+      }
+    }
+  },
+  "smoke": {
+    "tags": "@smoke"
+  },
+  "regression": {
+    "tags": "@regression"
+  }
+}

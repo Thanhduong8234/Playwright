@@ -1,0 +1,83 @@
+{
+  "default": {
+    "requireModule": [],
+    "require": [
+      "features/jp/step_definitions/**/*.js",
+      "hooks/**/*.js"
+    ],
+    "timeout": 120000,
+    "format": [
+      "progress",
+      "html:reports/cucumber-jp-report.html",
+      "json:reports/cucumber-jp-report.json",
+      "@cucumber/pretty-formatter"
+    ],
+    "formatOptions": {
+      "snippetInterface": "async-await",
+      "theme": "hierarchy"
+    },
+    "paths": [
+      "features/jp/**/*.feature"
+    ],
+    "parallel": 2,
+    "retry": 1,
+    "retryTagFilter": "@不安定",
+    "tags": "not @スキップ and not @作業中",
+    "worldParameters": {
+      "playwright": {
+        "headless": true,
+        "browser": "chromium",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "timeout": 120000,
+        "locale": "ja-JP",
+        "timezone": "Asia/Tokyo"
+      },
+      "environment": "staging",
+      "baseUrls": {
+        "staging": "https://automationexercise.com",
+        "production": "https://automationexercise.com"
+      },
+      "language": "japanese",
+      "encoding": "UTF-8"
+    }
+  },
+  "表示モード": {
+    "worldParameters": {
+      "playwright": {
+        "headless": false
+      }
+    }
+  },
+  "firefox": {
+    "worldParameters": {
+      "playwright": {
+        "browser": "firefox"
+      }
+    }
+  },
+  "webkit": {
+    "worldParameters": {
+      "playwright": {
+        "browser": "webkit"
+      }
+    }
+  },
+  "スモーク": {
+    "tags": "@スモーク"
+  },
+  "回帰テスト": {
+    "tags": "@回帰テスト"
+  },
+  "お問い合わせ": {
+    "tags": "@お問い合わせ"
+  },
+  "正常系": {
+    "tags": "@正常系"
+  },
+  "異常系": {
+    "tags": "@異常系"
+  }
+}

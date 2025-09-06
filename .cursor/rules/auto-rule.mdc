@@ -1,0 +1,271 @@
+---
+description: Use for Automation Project
+globs:
+alwaysApply: false
+---
+# 🎭 Playwright + Cucumber + POM Automation Test Prompts
+
+## 🧪 Test Generation & Structure
+
+### E2E Test Suite Generation
+```
+Generate a comprehensive E2E test suite using Playwright and Cucumber for [feature/page]. Include:
+- Feature file with BDD scenarios covering happy path, edge cases, and error scenarios
+- Step definitions with proper async/await handling
+- Page Object Model classes with locators and actions
+- Test data management with fixtures
+- Screenshots on failure configuration
+
+Label each component as:
+- 'Feature: [FeatureName].feature'
+- 'Steps: [FeatureName]Steps.js'
+- 'POM: [PageName]Page.js'
+- 'Fixtures: [FeatureName]TestData.js'
+```
+
+### API + UI Integration Tests
+```
+Create integration tests that combine API setup with UI validation for [workflow]. Include:
+- API helper class for test data preparation
+- UI Page Objects for user interactions
+- Cucumber scenarios mixing API and UI steps
+- Response validation and UI state verification
+
+Label each as:
+- 'API Helper: [Feature]ApiHelper.js'
+- 'UI Validation: [Feature]UIValidation.js'
+- 'Integration Feature: [Feature]Integration.feature'
+```
+
+## 🏗️ Page Object Model (POM) Structure
+
+### Advanced POM Generation
+```
+Generate a robust Page Object Model for [page/component] with:
+- Base Page class with common methods (waitFor, screenshot, etc.)
+- Specific page class extending BasePage
+- Locator strategies using data-testid, role-based selectors
+- Action methods with built-in waits and error handling
+- Assertion methods for state validation
+
+Structure as:
+- 'Base: BasePage.js'
+- 'Page: [PageName]Page.js'
+- 'Locators: [PageName]Locators.js'
+- 'Actions: [PageName]Actions.js'
+```
+
+### Component-Based POM
+```
+Create component-based Page Objects for reusable UI elements:
+- Header/Navigation component
+- Form components with validation
+- Modal/Dialog components
+- Table/List components with sorting/filtering
+
+Label as:
+- 'Component: [ComponentName]Component.js'
+- 'Usage: [ComponentName]Usage.js'
+```
+
+## 🥒 Cucumber BDD Enhancement
+
+### Feature File Templates
+```
+Generate Cucumber feature files following BDD best practices for [user story]:
+- Background scenarios for common setup
+- Scenario Outline for data-driven testing
+- Tags for test categorization (@smoke, @regression, @api)
+- Proper Given-When-Then structure
+- Business-readable language
+
+Format as:
+- 'Feature: [FeatureName].feature'
+- 'Tags: Test categorization strategy'
+- 'Data: Example tables with edge cases'
+```
+
+### Step Definition Patterns
+```
+Create reusable step definitions with:
+- Parameter passing using Cucumber expressions
+- World/Context object for data sharing between steps
+- Before/After hooks for setup/teardown
+- Screenshot capture on failure
+- Custom assertions with meaningful error messages
+
+Structure as:
+- 'Common Steps: CommonSteps.js'
+- 'Feature Steps: [Feature]Steps.js'
+- 'Hooks: TestHooks.js'
+- 'World: TestWorld.js'
+```
+
+## 🔐 Test Data & Configuration
+
+### Test Data Management
+```
+Create a comprehensive test data strategy:
+- Environment-specific configuration files
+- Test data factories for object generation
+- Database seeding/cleanup utilities
+- Mock data for offline testing
+- Sensitive data handling (credentials, tokens)
+
+Label as:
+- 'Config: Environment[Env].js'
+- 'Factory: [Entity]Factory.js'
+- 'Utilities: DataUtilities.js'
+- 'Mocks: [Service]MockData.js'
+```
+
+### Multi-Environment Setup
+```
+Generate configuration for multiple test environments:
+- Development, staging, production configs
+- Browser configuration matrix
+- Parallel execution settings
+- CI/CD pipeline integration
+- Report generation setup
+
+Structure as:
+- 'Config: playwright.config.js variants'
+- 'CI: .github/workflows/tests.yml'
+- 'Reports: CustomReporter.js'
+```
+
+## 🚀 Advanced Testing Patterns
+
+### Visual Regression Testing
+```
+Implement visual testing capabilities:
+- Screenshot comparison setup
+- Visual diff reporting
+- Cross-browser visual validation
+- Responsive design testing
+- Component-level visual tests
+
+Components:
+- 'Visual: VisualTestHelper.js'
+- 'Config: Visual test configuration'
+- 'Baseline: Screenshot management'
+```
+
+### Performance & Accessibility Testing
+```
+Integrate performance and accessibility testing:
+- Lighthouse integration for performance metrics
+- Axe-core for accessibility validation
+- Network throttling simulation
+- Memory leak detection
+- Core Web Vitals monitoring
+
+Structure as:
+- 'Performance: PerformanceTestHelper.js'
+- 'Accessibility: A11yTestHelper.js'
+- 'Metrics: MetricsCollector.js'
+```
+
+## 🛠️ Utility & Helper Functions
+
+### Custom Playwright Utilities
+```
+Create utility functions for common Playwright operations:
+- Wait strategies (custom conditions)
+- Element interaction helpers
+- File upload/download handlers
+- Cookie and session management
+- Browser context utilities
+
+Label as:
+- 'Utils: PlaywrightUtils.js'
+- 'Waits: CustomWaits.js'
+- 'Interactions: ElementHelpers.js'
+- 'Sessions: SessionManager.js'
+```
+
+### Debug & Troubleshooting Tools
+```
+Build debugging capabilities:
+- Step-by-step execution mode
+- Enhanced error reporting
+- Test execution videos
+- Network request logging
+- Element highlighting utilities
+
+Components:
+- 'Debug: DebugHelper.js'
+- 'Logging: TestLogger.js'
+- 'Reporter: EnhancedReporter.js'
+```
+
+## 🔄 CI/CD Integration
+
+### Pipeline Configuration
+```
+Generate CI/CD pipeline configurations for:
+- GitHub Actions workflow
+- Docker containerization
+- Parallel test execution
+- Test result reporting
+- Artifact management (screenshots, videos, reports)
+
+Files:
+- 'CI: .github/workflows/e2e-tests.yml'
+- 'Docker: Dockerfile.e2e'
+- 'Scripts: test-runner-scripts'
+```
+
+## 📊 Reporting & Analytics
+
+### Custom Test Reports
+```
+Create comprehensive reporting solutions:
+- HTML reports with screenshots
+- Test execution dashboards
+- Trend analysis over time
+- Failed test analysis
+- Integration with monitoring tools
+
+Structure as:
+- 'Reporter: CustomHTMLReporter.js'
+- 'Dashboard: TestDashboard.js'
+- 'Analytics: TestAnalytics.js'
+```
+
+## 🧠 Advanced Prompting Techniques
+
+### Chain-of-Thought Test Development
+```
+1. Analyze the user workflow and identify critical test scenarios
+2. Design Page Object Model structure with reusable components
+3. Create Cucumber feature files with comprehensive scenarios
+4. Implement step definitions with error handling
+5. Add visual and performance validations
+6. Integrate with CI/CD pipeline
+7. Provide final test execution strategy with reporting
+
+Label each step as 'Development Phase X'
+```
+
+### Multi-File Test Architecture
+```
+Generate complete test architecture for [application feature]:
+- [Feature].feature (Cucumber scenarios)
+- [Feature]Steps.js (Step definitions)
+- [Feature]Page.js (Page Object Model)
+- [Feature]TestData.js (Test data and fixtures)
+- [Feature]ApiHelper.js (API integration)
+- [Feature]Utils.js (Feature-specific utilities)
+- [Feature].spec.js (Playwright test runner integration)
+
+Each file should be production-ready with proper error handling and documentation.
+```
+
+## 🎯 Specialized Testing Scenarios
+
+### Mobile & Responsive Testing
+"Create mobile-first testing approach with Device emulation configurations, Touch gesture automation, Responsive breakpoint testing, Mobile-specific Page Objects, Cross-platform validation. Label as 'Mobile Test X', 'Responsive Test X', 'Gesture X'."
+
+### API Testing Integration
+"Combine API and UI testing workflows with REST API client with authentication, GraphQL query builders, API response validation, UI state verification after API calls, Mock server integration. Label as 'API Client X', 'GraphQL X', 'Validator X', 'Mock Server X'."

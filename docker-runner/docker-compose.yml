@@ -1,0 +1,71 @@
+# DOCKER COMPOSE FOR TEST RUNNER
+# Provides complete testing environment with services
+
+version: '3.8'
+
+services:
+  # Main test runner
+  test-runner:
+    build: 
+      context: ..
+      dockerfile: docker-runner/Dockerfile
+    container_name: playwright-cucumber-runner
+    volumes:
+      - ../reports:/app/reports
+      - ../screenshots:/app/screenshots
+      - ../videos:/app/videos
+      - ../traces:/app/traces
+    environment:
+      - NODE_ENV=production
+      - HEADED=false
+      - BROWSER=chromium
+      - PARALLEL=2
+      - TIMEOUT=120000
+    networks:
+      - test-network
+    depends_on:
+      - web-dashboard
+    
+  # Web dashboard for monitoring
+  web-dashboard:
+    build:
+      context: ..
+      dockerfile: docker-runner/Dockerfile.dashboard
+    container_name: test-dashboard
+    ports:
+      - "3001:3001"
+    volumes:
+      - ../reports:/app/reports
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    networks:
+      - test-network
+    
+  # Optional: Test data database
+  test-db:
+    image: postgres:13-alpine
+    container_name: test-database
+    environment:
+      - POSTGRES_DB=testdata
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpass
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - test-network
+    
+  # Optional: Redis for test caching
+  test-cache:
+    image: redis:6-alpine
+    container_name: test-cache
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+
+volumes:
+  test-db-data:

@@ -13,6 +13,12 @@ screenshots/
 downloads/
 test-files/
 
+# Cucumber reports
+reports/
+cucumber-report.html
+cucumber-report.json
+cucumber-enhanced-report.html
+
 # Log files
 *.log
 

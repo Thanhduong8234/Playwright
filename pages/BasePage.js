@@ -41,11 +41,20 @@ class BasePage {
    * @param {string} url - URL to navigate to
    */
   async goto(url) {
-    // Maximize browser window first
-    await this.maximizeWindow();
-    
-    // Navigate to URL
-    await this.page.goto(url);
+    try {
+      // Maximize browser window first
+      await this.maximizeWindow();
+      
+      // Navigate to URL with extended timeout
+      await this.page.goto(url, { 
+        waitUntil: 'networkidle', 
+        timeout: 30000 
+      });
+      console.log(`✅ Successfully navigated to: ${url}`);
+    } catch (error) {
+      console.error(`❌ Failed to navigate to: ${url}`, error.message);
+      throw error;
+    }
   }
 
   /**
@@ -101,8 +110,8 @@ class BasePage {
   }
 
   /**
-   * Click vào element với comprehensive debug
-   * @param {string} selector - CSS selector của element
+   * Click element with comprehensive debug
+   * @param {string} selector - CSS selector of the element
    */
   async clickElement(selector) {
     await this.waitForElementVisible(selector);
@@ -110,10 +119,10 @@ class BasePage {
   }
 
   /**
-   * Click vào element với position
-   * @param {string} selector - CSS selector của element
-   * @param {number} x - Vị trí x của element
-   * @param {number} y - Vị trí y của element
+   * Click element at specific position
+   * @param {string} selector - CSS selector of the element
+   * @param {number} x - x position of the element
+   * @param {number} y - y position of the element
    */
   async clickElementWithPosition(selector, x, y) {
     await this.waitForElementVisible(selector);
@@ -121,9 +130,9 @@ class BasePage {
   }
 
   /**
-   * Nhập text vào input field
-   * @param {string} selector - CSS selector của input
-   * @param {string} text - Text cần nhập
+   * Fill text into input field
+   * @param {string} selector - CSS selector of the input
+   * @param {string} text - Text to fill
    */
   async fillInput(selector, text) {
     await this.waitForElementVisible(selector);
@@ -131,50 +140,50 @@ class BasePage {
   }
 
   /**
-   * Nhấn phím
-   * @param {string} selector - CSS selector của element
-   * @param {string} key - Phím cần nhấn (ví dụ: 'Enter', 'Tab')
+   * Press key on element
+   * @param {string} selector - CSS selector of the element
+   * @param {string} key - Key to press (e.g., 'Enter', 'Tab')
    */
   async pressKey(selector, key) {
     await this.page.locator(selector).press(key);
   }
 
   /**
-   * Kiểm tra element có visible không
-   * @param {string} selector - CSS selector của element
-   * @returns {Promise<boolean>} True nếu element visible
+   * Check if element is visible
+   * @param {string} selector - CSS selector of the element
+   * @returns {Promise<boolean>} True if element is visible
    */
   async isElementVisible(selector) {
     return await this.page.locator(selector).isVisible();
   }
 
   /**
-   * Lấy title của trang
-   * @returns {Promise<string>} Title của trang
+   * Get page title
+   * @returns {Promise<string>} Title of the page
    */
   async getPageTitle() {
     return await this.page.title();
   }
 
   /**
-   * Lấy URL hiện tại
-   * @returns {Promise<string>} URL hiện tại
+   * Get current URL
+   * @returns {Promise<string>} Current URL
    */
   async getCurrentUrl() {
     return this.page.url();
   }
 
   /**
-   * Chụp ảnh màn hình
-   * @param {string} path - Đường dẫn lưu ảnh
-   * @param {boolean} fullPage - Chụp toàn bộ trang hay chỉ viewport
+   * Take screenshot
+   * @param {string} path - Path to save screenshot
+   * @param {boolean} fullPage - Capture full page or only viewport
    */
   async takeScreenshot(path, fullPage = false) {
     await this.page.screenshot({ path, fullPage });
   }
 
   /**
-   * Đợi cho trang load hoàn toàn
+   * Wait for page to fully load
    */
   async waitForPageLoad() {
     await this.page.waitForLoadState('load');
@@ -187,25 +196,25 @@ class BasePage {
   }
 
   /**
-   * Scroll đến element
-   * @param {string} selector - CSS selector của element
+   * Scroll to element
+   * @param {string} selector - CSS selector of the element
    */
   async scrollToElement(selector) {
     await this.page.locator(selector).scrollIntoViewIfNeeded();
   }
 
   /**
-   * Đếm số lượng elements
-   * @param {string} selector - CSS selector của elements
-   * @returns {Promise<number>} Số lượng elements
+   * Count number of elements
+   * @param {string} selector - CSS selector of the elements
+   * @returns {Promise<number>} Number of elements
    */
   async getElementCount(selector) {
     return await this.page.locator(selector).count();
   }
 
   /**
-   * Hover vào element
-   * @param {string} selector - CSS selector của element
+   * Hover over element
+   * @param {string} selector - CSS selector of the element
    */
   async hoverElement(selector) {
     await this.waitForElementVisible(selector);
@@ -213,8 +222,8 @@ class BasePage {
   }
 
   /**
-   * Double click vào element
-   * @param {string} selector - CSS selector của element
+   * Double click element
+   * @param {string} selector - CSS selector of the element
    */
   async doubleClickElement(selector) {
     await this.waitForElementVisible(selector);
@@ -222,8 +231,8 @@ class BasePage {
   }
 
   /**
-   * Right click vào element
-   * @param {string} selector - CSS selector của element
+   * Right click element
+   * @param {string} selector - CSS selector of the element
    */
   async rightClickElement(selector) {
     await this.waitForElementVisible(selector);
@@ -236,15 +245,15 @@ class BasePage {
   async acceptDialog() {
     this.page.once('dialog', async dialog => {
 
-      // expect(dialog.message()).toContain('Press OK to proceed!');
-      await dialog.accept(); // Ấn nút OK
+  // expect(dialog.message()).toContain('Press OK to proceed!');
+  await dialog.accept(); // Press OK button
     });
   }
 
   /**
    * Upload file
-   * @param {string} selector - CSS selector của input
-   * @param {string} filePath - Đường dẫn file cần upload
+   * @param {string} selector - CSS selector of the input
+   * @param {string} filePath - Path to file to upload
    */
   async uploadFile(selector, filePath) {
     const path = require('path');

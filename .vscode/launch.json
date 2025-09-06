@@ -1,7 +1,6 @@
 {
   "version": "0.2.0",
   "configurations": [
-    
     {
       "name": "Debug Playwright Tests",
       "type": "node",
@@ -21,6 +20,147 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug Cucumber Tests (English)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "features/**/*.feature",
+        "--require", "features/step_definitions/**/*.js",
+        "--require", "hooks/**/*.js",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
+    },
+    {
+      "name": "Debug Cucumber Tests (Japanese)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "--config", ".cucumberrc.jp.json",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
+    },
+    {
+      "name": "Debug Single Cucumber Feature",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "${file}",
+        "--require", "features/step_definitions/**/*.js",
+        "--require", "hooks/**/*.js",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
+    },
+    {
+      "name": "Debug Japanese Cucumber Feature",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "${file}",
+        "--config", ".cucumberrc.jp.json",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
+    },
+    {
+      "name": "Debug Cucumber Smoke Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "features/**/*.feature",
+        "--require", "features/step_definitions/**/*.js",
+        "--require", "hooks/**/*.js",
+        "--tags", "@smoke",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
+    },
+    {
+      "name": "Debug Japanese Cucumber Smoke Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "--config", ".cucumberrc.jp.json",
+        "--tags", "@スモーク",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
+    },
+    {
+      "name": "Debug Cucumber Contact Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "features/**/*.feature",
+        "--require", "features/step_definitions/**/*.js",
+        "--require", "hooks/**/*.js",
+        "--tags", "@contact-us",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
+    },
+    {
+      "name": "Debug Japanese Contact Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+      "args": [
+        "--config", ".cucumberrc.jp.json",
+        "--tags", "@お問い合わせ",
+        "--parallel", "1"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "HEADED": "true"
+      }
     }
   ]
 }

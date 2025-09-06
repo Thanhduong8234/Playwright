@@ -21,7 +21,54 @@
     "test:original": "playwright test tests/example.spec.js tests/advanced-ecommerce.spec.js tests/file-operations.spec.js",
     "test:basic": "playwright test tests/example.pom.spec.js",
     "test:ecommerce": "playwright test tests/advanced-ecommerce.pom.spec.js",
-    "test:files": "playwright test tests/file-operations.pom.spec.js"
+    "test:files": "playwright test tests/file-operations.pom.spec.js",
+    "test:cucumber": "cucumber-js features/**/*.feature --require features/step_definitions/**/*.js --require hooks/**/*.js",
+    "test:cucumber:headed": "HEADED=true cucumber-js features/**/*.feature --require features/step_definitions/**/*.js --require hooks/**/*.js",
+    "test:cucumber:parallel": "cucumber-js features/**/*.feature --require features/step_definitions/**/*.js --require hooks/**/*.js --parallel 2",
+    "test:cucumber:report": "cucumber-js features/**/*.feature --require features/step_definitions/**/*.js --require hooks/**/*.js --format html:cucumber-report.html",
+    "test:cucumber:json": "cucumber-js features/**/*.feature --require features/step_definitions/**/*.js --require hooks/**/*.js --format json:cucumber-report.json",
+    "test:cucumber:jp": "cucumber-js --config .cucumberrc.jp.json",
+    "test:cucumber:jp:headed": "HEADED=true cucumber-js --config .cucumberrc.jp.json --profile 表示モード",
+    "test:cucumber:jp:smoke": "cucumber-js --config .cucumberrc.jp.json --profile スモーク",
+    "test:cucumber:jp:regression": "cucumber-js --config .cucumberrc.jp.json --profile 回帰テスト",
+    "test:cucumber:jp:contact": "cucumber-js --config .cucumberrc.jp.json --profile お問い合わせ",
+    "test:cucumber:jp:firefox": "cucumber-js --config .cucumberrc.jp.json --profile firefox",
+    "test:cucumber:jp:webkit": "cucumber-js --config .cucumberrc.jp.json --profile webkit",
+    "test:run": "node test-runner.js",
+    "test:run:interactive": "node test-runner.js --interactive",
+    "test:run:smoke": "node test-runner.js --suite smoke",
+    "test:run:contact": "node test-runner.js --suite contact",
+    "test:run:regression": "node test-runner.js --suite regression",
+    "test:run:e2e": "node test-runner.js --suite e2e",
+    "test:run:headed": "node test-runner.js --suite smoke --headed",
+    "test:run:firefox": "node test-runner.js --suite smoke --browser firefox --headed",
+    "test:run:webkit": "node test-runner.js --suite smoke --browser webkit --headed",
+    "test:run:parallel": "node test-runner.js --suite regression --parallel 3",
+    "test:run:feature": "node test-runner.js --feature",
+    "test:run:tags": "node test-runner.js --tags",
+    "test:run:help": "node test-runner.js --help",
+    "test:run:list": "node test-runner.js --list",
+    "test:run:report": "node test-runner.js --suite smoke --open-report",
+    "test:run:smoke:report": "node test-runner.js --suite smoke --open-report",
+    "test:run:contact:report": "node test-runner.js --suite contact --open-report",
+    "test:run:regression:report": "node test-runner.js --suite regression --open-report",
+    "test:run:no-report": "node test-runner.js --suite smoke --no-report",
+    "test:open:report": "start reports/cucumber-enhanced-report.html",
+    "enhanced": "node simple-enhanced-runner.js",
+    "enhanced:smoke": "node simple-enhanced-runner.js --suite smoke --headed",
+    "enhanced:regression": "node simple-enhanced-runner.js --suite regression --parallel 2",
+    "enhanced:e2e": "node simple-enhanced-runner.js --suite e2e --browser firefox --headed",
+    "enhanced:contact": "node simple-enhanced-runner.js --suite contact --screenshots always",
+    "enhanced:performance": "node simple-enhanced-runner.js --suite performance --trace --videos",
+    "enhanced:interactive": "node simple-enhanced-runner.js --interactive",
+    "enhanced:help": "node simple-enhanced-runner.js --help",
+    "enhanced:list": "node simple-enhanced-runner.js --list",
+    "enhanced:system": "node simple-enhanced-runner.js --system-info",
+    "dashboard": "node web-dashboard/server.js",
+    "docker:build": "docker build -f docker-runner/Dockerfile -t playwright-cucumber .",
+    "docker:run": "docker run --rm -v $(pwd)/reports:/app/reports playwright-cucumber",
+    "docker:compose": "docker-compose -f docker-runner/docker-compose.yml up",
+    "setup:enhanced": "npm install chalk && echo 'Enhanced runner setup complete!'"
   },
   "keywords": [
     "playwright",
@@ -33,9 +80,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.54.2"
+    "@cucumber/cucumber": "^10.3.1",
+    "@cucumber/pretty-formatter": "^1.0.1",
+    "@playwright/test": "^1.54.2",
+    "cucumber-html-reporter": "^7.1.1",
+    "multiple-cucumber-html-reporter": "^3.5.0"
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "chalk": "5.6.0"
   }
 }

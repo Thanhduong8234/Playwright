@@ -146,6 +146,59 @@ class ContactPage extends BasePage {
   async setInputFile(filePath) {
     await this.uploadFile(this.selectors.input_UploadFile, filePath);
   }
+
+  /**
+   * Check if contact form is visible
+   * @returns {Promise<boolean>} True if form is visible
+   */
+  async isContactFormVisible() {
+    const nameVisible = await this.isElementVisible(this.selectors.input_Name);
+    const emailVisible = await this.isElementVisible(this.selectors.input_Email);
+    const submitVisible = await this.isElementVisible(this.selectors.button_Submit);
+    
+    return nameVisible && emailVisible && submitVisible;
+  }
+
+  /**
+   * Get email validation message for Cucumber steps
+   * @returns {Promise<string>} Email validation message
+   */
+  async getEmailValidationMessage() {
+    return await this.getElementTooltip(this.selectors.input_Email);
+  }
+
+  /**
+   * Check if field has validation error
+   * @param {string} fieldName - Field name (name, email, subject, message)
+   * @returns {Promise<boolean>} True if field has validation error
+   */
+  async hasValidationError(fieldName) {
+    const fieldSelectors = {
+      'name': this.selectors.input_Name,
+      'email': this.selectors.input_Email,
+      'subject': this.selectors.input_Subject,
+      'message': this.selectors.input_Message
+    };
+    
+    const selector = fieldSelectors[fieldName.toLowerCase()];
+    if (!selector) {
+      throw new Error(`Unknown field: ${fieldName}`);
+    }
+    
+    // Check if field has validation attributes or error state
+    const hasError = await this.page.evaluate((sel) => {
+      const element = document.querySelector(sel);
+      if (!element) return false;
+      
+      // Check various validation indicators
+      return !element.validity.valid || 
+             element.validationMessage !== '' ||
+             element.classList.contains('error') ||
+             element.classList.contains('invalid');
+    }, selector);
+    
+    return hasError;
+  }
 }
 
 module.exports = ContactPage;
